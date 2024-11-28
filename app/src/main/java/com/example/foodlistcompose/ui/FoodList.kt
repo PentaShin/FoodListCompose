@@ -5,5 +5,6 @@ data class FoodList(
     val name: String,
     val description: String,
     val image: Int,
-    val price: String
+    val price: String,
+    val icon: Int
 )
