@@ -36,11 +36,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.foodlistcompose.R
 
-class MainActivity : ComponentActivity() {
+class MainActivity() : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        lateinit var navController: NavController
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -54,7 +60,9 @@ class MainActivity : ComponentActivity() {
                             .height(80.dp),
                         actions = {
                             IconButton(
-                                onClick = { /* TODO */ },
+                                onClick = {
+                                    navController.navigate("ShopAddScreen")
+                                },
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_shop),
@@ -65,10 +73,9 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 content = { innerPadding ->
-                    FoodListStruct(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
+                    Navigation(
+                        navController = rememberNavController(),
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             )
@@ -77,83 +84,8 @@ class MainActivity : ComponentActivity() {
 }
 
 
-val foodlist = listOf(
-    FoodList(1, "Pizza", "Delicious Italian pizza", R.drawable.pizza , "$10.99", R.drawable.ic_add ),
-    FoodList(2, "Burger", "Juicy beef burger", R.drawable.burger , "$8.99" , R.drawable.ic_add),
-    FoodList(3, "Sushi", "Assorted sushi rolls", R.drawable.sushi , "$12.99", R.drawable.ic_add),
-    FoodList(4, "Salad", "Fresh garden salad", R.drawable.salad , "$6.99", R.drawable.ic_add),
-    FoodList(5, "Pasta", "Classic Italian pasta", R.drawable.pasta, "$9.99", R.drawable.ic_add),
-    FoodList(6, "Tacos", "Mexican taco bowl", R.drawable.tacos, "$7.99", R.drawable.ic_add),
-    FoodList(7, "Steak", "Juicy steak sandwich", R.drawable.steak, "$11.99", R.drawable.ic_add)
-)
 
 
-
-@Composable
-fun FoodListStruct(
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(foodlist.size) { index ->
-            val food = foodlist[index]
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    painter = painterResource(id = food.image),
-                    contentDescription = food.name,
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .size(120.dp),
-                )
-
-
-                Column(
-                    modifier = Modifier
-                        .padding(end = 100.dp)
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Text(
-                        text = food.name,
-                        color = Color.Green
-                    )
-                    Text(
-                        text = food.price,
-                        modifier = Modifier.padding(bottom = 8.dp),
-                    )
-                }
-                IconButton(
-                    onClick = { /* TODO */ },
-                    modifier = Modifier
-                        .size(12.dp)
-                        .padding(end = 32.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = food.icon),
-                        contentDescription = "Add"
-                    )
-                }
-            }
-        }
-    }
-}
-
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyappTheme {
-        FoodListStruct()
-    }
-}
 
 
 
